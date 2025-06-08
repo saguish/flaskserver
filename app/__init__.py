@@ -28,7 +28,6 @@ def create_app():
     # Carrega configurações
     app.config.from_object(Config)
 
-    print(f"DEBUG: JWT_SECRET_KEY carregada: {os.environ.get('JWT_SECRET_KEY')}")
 
     # Inicializa extensões
     db.init_app(app)
