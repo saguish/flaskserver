@@ -1,0 +1,16 @@
+# Ambiente virtual (venv)
+venv/
+*.pyc
+__pycache__/
+
+# Arquivo de variáveis de ambiente
+.env
+
+# Pastas de migrações, se você preferir não versionar
+migrations/
+
+# Logs
+*.log
+
+# Configurações do sistema operacional
+.DS_Store

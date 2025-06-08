@@ -1,0 +1,54 @@
+Por que essa estrutura?
+
+O diretório app/ contém todo o código-fonte da aplicação.
+
+config.py guarda as configurações (URI do banco, secret key, etc.).
+
+extensions.py inicializa instâncias de db = SQLAlchemy(), jwt = JWTManager(), migrate = Migrate(), etc.
+
+Cada blueprint (em app/blueprints/) organiza um domínio de responsabilidade:
+
+public: rotas que qualquer usuário (autenticado ou não) pode acessar.
+
+private: rotas que somente usuários autenticados via JWT poderão acessar.
+
+auth: lógica de login, registro, refresh de token.
+
+calculosderede: roteamento dos endpoints que chamam seu código de cálculos mecânicos.
+
+
+
+projetoflask/
+├── app/                          # Pasta principal da aplicação Flask
+│   ├── __init__.py
+│   ├── config.py                 # Configurações (DB, JWT, etc.)
+│   ├── extensions.py             # Aqui serão inicializadas SQLAlchemy, JWT, Migrate, etc.
+│   ├── models/
+│   │   └── user.py               # Modelo de Usuário (para autenticação)
+│   ├── blueprints/
+│   │   ├── public/               # Rotas públicas (sem autênticação)
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   ├── private/              # Rotas privadas (ex.: dashboard, etc.)
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   ├── auth/                 # Blueprint só de autenticação (login, registro, token)
+│   │   │   ├── __init__.py
+│   │   │   └── routes.py
+│   │   └── calculos/             # Blueprint da API de cálculos mecânicos
+│   │       ├── __init__.py
+│   │       └── routes.py
+│   └── utils/                    # Utilitários, helpers, etc.
+│       └── __init__.py
+├── migrations/                   # Diretório gerado pelo Flask-Migrate
+├── scripts/                      # Scripts auxiliares (por ex., para popular DB)
+│   └── create_admin.py
+├── requirements.txt              # congela dependências após testar (opcional)
+├── run.py                        # ponto de entrada da aplicação
+└── .env                          # variáveis de ambiente (não subir no Git)
+
+
+
+curl -X GET \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0OTM5NzA2MCwianRpIjoiYWMyYTE0NDQtMzc5ZS00YmM1LTgyMGQtZjcwM2EwOTgxZmQ2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NDkzOTcwNjAsImNzcmYiOiIyNTBmYWU1NS04Yzg2LTQ5Y2MtYmEyZS01YmYyNzJmNDUxODUiLCJleHAiOjE3NDk0MDA2NjB9.-8WAkSQ9OrYtc4Du7cQ1S2p7Kf23dI2vrG_1C5iiwwQ " \
+     http://localhost:5000/privado/dashboard
